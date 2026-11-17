@@ -70,9 +70,10 @@ class PublicBuildTests(unittest.TestCase):
             self.assertIn("<title>", html, f"Missing title: {page.name}")
             self.assertIn('name="description"', html,
                           f"Missing search description: {page.name}")
-            self.assertIn('href="../disclosure.html"' if page.parent != DIST
-                          else 'href="disclosure.html"', html,
-                          f"Missing affiliate disclosure link: {page.name}")
+            if page.name != "disclosure.html":
+                self.assertIn('href="../disclosure.html"' if page.parent != DIST
+                              else 'href="disclosure.html"', html,
+                              f"Missing affiliate disclosure link: {page.name}")
             url = ("https://example.com/smartgear-scout/" if page.name == "index.html" and page.parent == DIST
                    else "https://example.com/smartgear-scout/" + page.relative_to(DIST).as_posix())
             self.assertIn('<link rel="canonical" href="' + url + '">',

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Read-only production smoke check. Uses only Python standard library."""
-from html.parser import HTMLParser
 from urllib.request import Request, urlopen
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 from xml.etree import ElementTree as ET
 import sys
 
@@ -24,15 +23,17 @@ def main():
     urls = [node.text for node in sitemap.findall("s:url/s:loc", NS)]
     assert len(urls) >= 10, f"Unexpected sitemap size: {len(urls)}"
     assert len(urls) == len(set(urls)), "Duplicate URLs"
-    assert all(u.startswith(BASE + "/") for u in urls), "Unexpected sitemap origin"
+    assert all(urlsplit(u).scheme == "https" and urlsplit(u).netloc == urlsplit(BASE).netloc and urlsplit(u).path.startswith("/") for u in urls), "Unexpected sitemap origin"
     assert all("/google" not in u for u in urls), "Verification token leaked into sitemap"
     assert BASE + "/" in urls, "Homepage absent from sitemap"
+    assert all(not urlsplit(u).query and not urlsplit(u).fragment for u in urls), "Unexpected query or fragment in sitemap"
     for url in urls:
         relative = url[len(BASE):]
         html = fetch(relative)
         expected = '<link rel="canonical" href="' + url + '">'
         assert expected in html, f"Canonical missing or incorrect: {url}"
         assert "<title>" in html, f"Missing page title: {url}"
+        assert 'name="description"' in html, f"Missing meta description: {url}"
     print(f"OK: robots, sitemap and {len(urls)} canonical pages are accessible")
 
 if __name__ == "__main__":

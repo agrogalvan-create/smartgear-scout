@@ -30,6 +30,8 @@ def audit():
             url = urlsplit(href)
             if url.scheme or url.netloc or href.startswith("//"):
                 continue
+            if url.path == "" and not url.fragment:
+                continue
             target = (page if not url.path else ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path)))).resolve()
             if not target.is_relative_to(SITE_ROOT):
                 errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")

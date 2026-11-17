@@ -22,6 +22,20 @@ class PublicBuildTests(unittest.TestCase):
         self.assertIn("Sitemap: https://smartgear-scout.pages.dev/sitemap.xml",
                       (DIST / "robots.txt").read_text())
 
+    def test_sitemap_regeneration_is_idempotent(self):
+        env = dict(os.environ, SITE_URL="https://example.com/smartgear-scout")
+        subprocess.run([sys.executable, str(ROOT / "scripts/build_site.py")],
+                       cwd=ROOT, env=env, check=True, capture_output=True, text=True)
+        subprocess.run([sys.executable, str(ROOT / "scripts/generate_sitemap.py")],
+                       cwd=ROOT, env=env, check=True, capture_output=True, text=True)
+        robots = (DIST / "robots.txt").read_text(encoding="utf-8")
+        self.assertEqual(robots.count("Sitemap:"), 1)
+        for page in DIST.rglob("*.html"):
+            if page.parent == DIST and page.name.startswith("google"):
+                continue
+            self.assertEqual(page.read_text(encoding="utf-8").count('rel="canonical"'), 1,
+                             f"Duplicate canonical tag in {page.name}")
+
     def test_public_output_and_sitemap(self):
         env = dict(os.environ, SITE_URL="https://example.com/smartgear-scout")
         subprocess.run([sys.executable, str(ROOT / "scripts/build_site.py")],

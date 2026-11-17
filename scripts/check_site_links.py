@@ -21,13 +21,13 @@ class Links(HTMLParser):
 
 def audit():
     errors = []
-    pages = sorted(SITE_ROOT.rglob("*.html"))
+    pages = sorted(p for p in SITE_ROOT.rglob("*.html") if not (SITE_ROOT == ROOT and "dist" in p.relative_to(ROOT).parts))
     for page in pages:
         parser = Links()
         parser.feed(page.read_text(encoding="utf-8"))
         for href in parser.links:
             url = urlsplit(href)
-            if url.scheme or url.netloc or href.startswith(("#", "mailto:", "tel:", "//")):
+            if url.scheme or url.netloc or href.startswith(("#", "//")):
                 continue
             target = ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path))).resolve()
             if not target.is_relative_to(SITE_ROOT):

@@ -10,6 +10,18 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 
 class PublicBuildTests(unittest.TestCase):
+    def test_production_sitemap_without_site_url_override(self):
+        env = dict(os.environ)
+        env.pop("SITE_URL", None)
+        subprocess.run([sys.executable, str(ROOT / "scripts/build_site.py")],
+                       cwd=ROOT, env=env, check=True, capture_output=True, text=True)
+        tree = ET.parse(DIST / "sitemap.xml")
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        urls = [node.text for node in tree.findall("s:url/s:loc", ns)]
+        self.assertIn("https://smartgear-scout.pages.dev/", urls)
+        self.assertIn("Sitemap: https://smartgear-scout.pages.dev/sitemap.xml",
+                      (DIST / "robots.txt").read_text())
+
     def test_public_output_and_sitemap(self):
         env = dict(os.environ, SITE_URL="https://example.com/smartgear-scout")
         subprocess.run([sys.executable, str(ROOT / "scripts/build_site.py")],

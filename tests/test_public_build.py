@@ -28,7 +28,13 @@ class PublicBuildTests(unittest.TestCase):
         urls = [n.text for n in tree.findall("s:url/s:loc", ns)]
         self.assertIn("https://example.com/smartgear-scout/", urls)
         self.assertIn("https://example.com/smartgear-scout/about.html", urls)
-        self.assertEqual(len(urls), len(list(DIST.rglob("*.html"))))
+        editorial_pages = [p for p in DIST.rglob("*.html")
+                           if not (p.parent == DIST and p.name.startswith("google"))]
+        self.assertEqual(len(urls), len(editorial_pages))
+        self.assertTrue(all("/google" not in url for url in urls))
+        for verification in ROOT.glob("google*.html"):
+            self.assertTrue((DIST / verification.name).is_file(),
+                            "Google verification must remain publicly accessible")
         robots = (DIST / "robots.txt").read_text()
         self.assertIn("Sitemap: https://example.com/smartgear-scout/sitemap.xml", robots)
 

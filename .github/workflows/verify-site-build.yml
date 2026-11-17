@@ -40,6 +40,8 @@ jobs:
           grep -q 'Sitemap: https://example.com/smartgear-scout/sitemap.xml' dist/robots.txt
       - name: End-to-end public build tests
         run: python -m unittest discover -s tests -p 'test_public_build.py' -v
+      - name: Audit deployable HTML links
+        run: python scripts/check_site_links.py dist
       - name: Check output
         run: |
           test -f dist/index.html

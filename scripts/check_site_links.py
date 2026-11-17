@@ -2,6 +2,7 @@
 """Check internal HTML links; external URLs are not fetched."""
 from html.parser import HTMLParser
 from pathlib import Path
+import re
 from urllib.parse import unquote, urlsplit
 import sys
 
@@ -27,9 +28,9 @@ def audit():
         parser.feed(page.read_text(encoding="utf-8"))
         for href in parser.links:
             url = urlsplit(href)
-            if url.scheme or url.netloc or href.startswith(("#", "//")):
+            if url.scheme or url.netloc or href.startswith("//"):
                 continue
-            target = ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path))).resolve()
+            target = (page if not url.path else ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path)))).resolve()
             if not target.is_relative_to(SITE_ROOT):
                 errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")
             elif not target.exists():
@@ -37,7 +38,6 @@ def audit():
             elif target.is_dir() and not (target / "index.html").exists():
                 errors.append(f"{page.relative_to(SITE_ROOT)}: directory without index: {href}")
             elif url.fragment and target.suffix == ".html" and target.is_file():
-                import re
                 fragment = unquote(url.fragment)
                 content = target.read_text(encoding="utf-8")
                 if not re.search(r'\bid\s*=\s*["\']' + re.escape(fragment) + r'["\']', content):

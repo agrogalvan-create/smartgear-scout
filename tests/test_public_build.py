@@ -51,6 +51,11 @@ class PublicBuildTests(unittest.TestCase):
             else "https://example.com/smartgear-scout/" + p.relative_to(DIST).as_posix()
             for p in editorial_pages
         }
+        for page in editorial_pages:
+            url = ("https://example.com/smartgear-scout/" if page.name == "index.html" and page.parent == DIST
+                   else "https://example.com/smartgear-scout/" + page.relative_to(DIST).as_posix())
+            self.assertIn('<link rel="canonical" href="' + url + '">',
+                          page.read_text(encoding="utf-8"))
         self.assertEqual(set(urls), expected_urls,
                          "Sitemap must match all published editorial HTML pages")
         for verification in ROOT.glob("google*.html"):

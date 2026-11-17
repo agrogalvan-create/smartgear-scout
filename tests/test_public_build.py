@@ -30,11 +30,16 @@ class PublicBuildTests(unittest.TestCase):
                        cwd=ROOT, env=env, check=True, capture_output=True, text=True)
         robots = (DIST / "robots.txt").read_text(encoding="utf-8")
         self.assertEqual(robots.count("Sitemap:"), 1)
+        self.assertIn("Sitemap: https://example.com/smartgear-scout/sitemap.xml", robots)
         for page in DIST.rglob("*.html"):
             if page.parent == DIST and page.name.startswith("google"):
                 continue
-            self.assertEqual(page.read_text(encoding="utf-8").count('rel="canonical"'), 1,
+            content = page.read_text(encoding="utf-8")
+            self.assertEqual(content.count('rel="canonical"'), 1,
                              f"Duplicate canonical tag in {page.name}")
+            expected = ("https://example.com/smartgear-scout/" if page == DIST / "index.html"
+                        else "https://example.com/smartgear-scout/" + page.relative_to(DIST).as_posix())
+            self.assertIn('<link rel="canonical" href="' + expected + '">', content)
 
     def test_public_output_and_sitemap(self):
         env = dict(os.environ, SITE_URL="https://example.com/smartgear-scout")

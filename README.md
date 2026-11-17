@@ -2,18 +2,22 @@
 
 Independent editorial pilot for US water, irrigation and home-equipment buying guidance.
 
-## Deployment
+## Current status
+The repository contains a static editorial site and an initial comparison of smart irrigation controllers. No verified live prices, approved affiliate links, or sales are claimed.
 
-The static site is served from the repository root. To publish at no hosting cost, enable GitHub Pages in repository Settings → Pages → Deploy from a branch → main / (root).
+## Hosting decision
+**Do not use GitHub Pages as the production host for a primarily commercial affiliate website.** GitHub Pages terms restrict using the service as free hosting for an online business or e-commerce site. Keep GitHub for source control and development; select a host whose current terms explicitly permit affiliate/commercial content before launch. No paid hosting is authorized.
 
-## Status
+## Commercial validation gates
+1. Verify affiliate program eligibility for an operator resident in Argentina, payment methods, tax requirements and category commission rates using official sources.
+2. Build a product evidence register: exact model, official specification URL, source date, merchant, price timestamp (if authorized), commission and eligibility status.
+3. Verify a compliant commercial host and domain/brand availability before launch.
+4. Publish useful original comparisons; never claim hands-on testing or display invented prices, stock or discounts.
+5. Apply to programs only when site and disclosures meet their rules; use affiliate links only after approval.
+6. Track visitors, outbound clicks and actual commissions; review after 30 days.
 
-No active affiliate links, verified live product prices or product rankings yet. Product research and merchant approvals remain pending.
-
-## Next milestones
-
-1. Enable GitHub Pages and verify public URL.
-2. Verify merchant program eligibility from Argentina and payment terms.
-3. Publish original model-level comparisons with source verification.
-4. Apply for affiliate programs; only then add compliant tracking links.
-5. Monitor search traffic, outbound clicks and attributed commissions.
+## Automation safety
+- No scraping behind logins, paywalls or prohibited by merchant terms.
+- No auto-publication of unsupported claims or unverified pricing.
+- No paid subscriptions, domain purchase, financial commitments or external applications without explicit authorization.
+- Keep the site in English for US visitors, with editorial and affiliate disclosures.

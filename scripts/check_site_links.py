@@ -33,7 +33,7 @@ def audit():
             if not target.is_relative_to(SITE_ROOT):
                 errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")
             elif not target.exists():
-                errors.append(f"{page.relative_to(ROOT)}: broken link: {href}")
+                errors.append(f"{page.relative_to(SITE_ROOT)}: broken link: {href}")
     return len(pages), errors
 
 if __name__ == "__main__":

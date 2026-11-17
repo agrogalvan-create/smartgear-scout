@@ -33,3 +33,9 @@ SITE_URL=https://CONFIRMED-HOST/CONFIRMED-PATH python3 scripts/generate_sitemap.
 ```
 
 The generator writes `dist/sitemap.xml` and appends the correct Sitemap directive to `dist/robots.txt`. Submit that verified sitemap URL in the matching Search Console property. Do not submit a URL on an unverified host.
+
+## Confirmed Cloudflare deployment (2026-11-17)
+The owner supplied a Cloudflare Pages dashboard screenshot showing successful production deployments for `main` and automatic deployments enabled. The assigned domain is `https://smartgear-scout.pages.dev`. A green deployment status confirms the platform build/deployment completed; independent HTTP content verification and Search Console indexing remain separate checks.
+
+### Production sitemap setup
+Set the Cloudflare Pages production environment variable `SITE_URL` to `https://smartgear-scout.pages.dev` (no trailing slash). The existing build script then generates `dist/sitemap.xml` and adds the sitemap directive to `dist/robots.txt` during the next deployment. Do not submit the sitemap to Google until its URL is reachable. The previously verified Search Console property for GitHub Pages does **not** cover the new `pages.dev` URL; add and verify a new URL-prefix property for `https://smartgear-scout.pages.dev/` before submitting `https://smartgear-scout.pages.dev/sitemap.xml`.

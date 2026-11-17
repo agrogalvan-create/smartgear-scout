@@ -35,8 +35,10 @@ def audit():
             target = (page if not url.path else ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path)))).resolve()
             if not target.is_relative_to(SITE_ROOT):
                 errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")
+                continue
             elif not target.exists():
                 errors.append(f"{page.relative_to(SITE_ROOT)}: broken link: {href}")
+                continue
             elif target.is_dir():
                 index = target / "index.html"
                 if not index.is_file():

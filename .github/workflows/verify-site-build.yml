@@ -6,7 +6,7 @@ on:
       - 'robots.txt'
       - 'scripts/build_site.py'
       - 'scripts/generate_sitemap.py'
-      - 'tests/test_public_build.py'
+      - 'tests/**'
       - 'scripts/check_site_links.py'
       - '.github/workflows/verify-site-build.yml'
   pull_request:
@@ -41,7 +41,7 @@ jobs:
           python -c "import xml.etree.ElementTree as ET; ET.parse('dist/sitemap.xml')"
           grep -q 'Sitemap: https://example.com/smartgear-scout/sitemap.xml' dist/robots.txt
       - name: End-to-end public build tests
-        run: python -m unittest discover -s tests -p 'test_public_build.py' -v
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Audit deployable HTML links
         run: python scripts/check_site_links.py dist
       - name: Check output

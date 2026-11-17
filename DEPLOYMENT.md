@@ -27,10 +27,9 @@ To generate a sitemap for the already-confirmed live URL:
 
 ```sh
 python3 scripts/build_site.py
-python3 scripts/build_site.py
 ```
 
-The generator writes `dist/sitemap.xml` and appends the correct Sitemap directive to `dist/robots.txt`. Submit that verified sitemap URL in the matching Search Console property. Do not submit a URL on an unverified host.
+The build generates `dist/sitemap.xml` and sets the correct Sitemap directive in `dist/robots.txt`. Running the sitemap generator again replaces existing canonical and sitemap declarations rather than duplicating them. Submit that verified sitemap URL in the matching Search Console property. Do not submit a URL on an unverified host.
 
 ## Confirmed Cloudflare deployment (2026-11-17)
 The owner supplied a Cloudflare Pages dashboard screenshot showing successful production deployments for `main` and automatic deployments enabled. The assigned domain is `https://smartgear-scout.pages.dev`. A green deployment status confirms the platform build/deployment completed; independent HTTP content verification and Search Console indexing remain separate checks.

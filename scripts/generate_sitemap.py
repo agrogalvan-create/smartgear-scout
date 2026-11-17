@@ -16,6 +16,9 @@ if not out.joinpath("index.html").exists():
 sitemap = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
 for page in sorted(out.rglob("*.html")):
     relative = page.relative_to(out).as_posix()
+    # Google ownership tokens are verification files, not editorial pages.
+    if page.name.startswith("google") and page.parent == out:
+        continue
     loc = origin + ("/" if relative == "index.html" else "/" + relative)
     entry = SubElement(sitemap, "url")
     SubElement(entry, "loc").text = loc

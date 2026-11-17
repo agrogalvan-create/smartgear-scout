@@ -6,6 +6,7 @@ from urllib.parse import unquote, urlsplit
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+SITE_ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT
 
 class Links(HTMLParser):
     def __init__(self):
@@ -20,7 +21,7 @@ class Links(HTMLParser):
 
 def audit():
     errors = []
-    pages = sorted(ROOT.rglob("*.html"))
+    pages = sorted(SITE_ROOT.rglob("*.html"))
     for page in pages:
         parser = Links()
         parser.feed(page.read_text(encoding="utf-8"))
@@ -28,9 +29,9 @@ def audit():
             url = urlsplit(href)
             if url.scheme or url.netloc or href.startswith(("#", "mailto:", "tel:", "//")):
                 continue
-            target = (page.parent / unquote(url.path)).resolve()
-            if not target.is_relative_to(ROOT.resolve()):
-                errors.append(f"{page.relative_to(ROOT)}: path escapes site: {href}")
+            target = ((SITE_ROOT / unquote(url.path).lstrip("/")) if url.path.startswith("/") else (page.parent / unquote(url.path))).resolve()
+            if not target.is_relative_to(SITE_ROOT):
+                errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")
             elif not target.exists():
                 errors.append(f"{page.relative_to(ROOT)}: broken link: {href}")
     return len(pages), errors

@@ -21,3 +21,15 @@ Cloudflare Pages supports Git-connected static-site deployments and its Free pla
 - No additional subscriptions or purchases authorized.
 
 Do not claim deployment succeeded until the public URL is visited and checked.
+
+## Search Console discovery (2026-11-17)
+Google emailed confirmation that the property `https://agrogalvan-create.github.io/smartgear-scout/` was verified in Search Console. This **does not prove that the site is reachable or that Google has indexed any page**. Public URL availability must be tested independently. GitHub Pages may be unsuitable for a primarily commercial affiliate business under GitHub's service terms; do not assume it is the production host.
+
+To generate a sitemap **only after confirming the actual live URL**:
+
+```sh
+python3 scripts/build_site.py
+SITE_URL=https://CONFIRMED-HOST/CONFIRMED-PATH python3 scripts/generate_sitemap.py
+```
+
+The generator writes `dist/sitemap.xml` and appends the correct Sitemap directive to `dist/robots.txt`. Submit that verified sitemap URL in the matching Search Console property. Do not submit a URL on an unverified host.

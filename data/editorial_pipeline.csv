@@ -1,0 +1,7 @@
+topic,intent,status,primary_metric,verification_needed
+well pump sizing,informational,draft,total dynamic head,manufacturer curves
+smart irrigation controller,commercial,draft,zone count,compatibility and subscription terms
+drip irrigation kit,commercial,draft,flow and filtration,manufacturer specifications
+booster pump,commercial,draft,flow at pressure,pump curves
+sump pump,commercial,draft,flow at head,manufacturer specifications
+pressure washer,commercial,draft,PSI and GPM,manufacturer specifications

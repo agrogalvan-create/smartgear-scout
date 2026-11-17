@@ -26,6 +26,8 @@ assert (out / "about.html").exists(), "Missing about page"
 import os
 import subprocess
 import sys
-if os.environ.get("SITE_URL"):
-    subprocess.run([sys.executable, str(root / "scripts" / "generate_sitemap.py")], check=True)
+# Confirmed Cloudflare Pages production origin; CI may override SITE_URL.
+os.environ.setdefault("SITE_URL", "https://smartgear-scout.pages.dev")
+subprocess.run([sys.executable, str(root / "scripts" / "generate_sitemap.py")], check=True)
+assert (out / "sitemap.xml").is_file(), "Missing generated sitemap"
 print("Public-only site assembled in dist/; internal research and source scripts excluded.")

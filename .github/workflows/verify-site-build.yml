@@ -1,0 +1,39 @@
+name: Verify deployable static site
+on:
+  push:
+    paths:
+      - '**/*.html'
+      - 'robots.txt'
+      - 'scripts/build_site.py'
+      - 'scripts/check_site_links.py'
+      - '.github/workflows/verify-site-build.yml'
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'robots.txt'
+      - 'scripts/build_site.py'
+      - 'scripts/check_site_links.py'
+      - '.github/workflows/verify-site-build.yml'
+  workflow_dispatch:
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit source HTML links
+        run: python scripts/check_site_links.py
+      - name: Build public site
+        run: python scripts/build_site.py
+      - name: Check output
+        run: |
+          test -f dist/index.html
+          test -f dist/about.html
+          test -f dist/disclosure.html
+          test ! -e dist/research
+          test ! -e dist/scripts
+          test ! -e dist/.github

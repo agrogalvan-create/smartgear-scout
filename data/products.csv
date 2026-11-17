@@ -2,3 +2,15 @@ category,brand,model,official_spec_url,verified_at,merchant,merchant_url,affilia
 smart-irrigation,Rachio,Rachio 3,https://support.rachio.com/en_us/rachio-sprinkler-controller-models-tech-specs-HyfTxF0YY,2026-11-17,,,,,,reviewed
 smart-irrigation,Orbit,B-hyve XR,https://support.orbitonline.com/en/b-hyve-xr-smart-indoor-outdoor-sprinkler-timer/Which-devices-are-supported-B-hyve-4f0,2026-11-17,,,,,,reviewed
 smart-irrigation,Hunter,X2 with WAND,https://stage.hydrawise.hunterindustries.com/content/x2-wand-smart-irrigation-controller,2026-11-17,,,,,,reviewed
+smart-irrigation,Rain Bird,ESP-TM2 with LNK2,,,,,,,,pending
+smart-irrigation,Rain Bird,ARC8,,,,,,,,pending
+smart-irrigation,Orbit,B-hyve 4-zone indoor timer,,,,,,,,pending
+smart-irrigation,Hunter,Pro-HC,,,,,,,,pending
+smart-irrigation,Rachio,Smart Hose Timer,,,,,,,,pending
+leak-detection,Moen,Flo Smart Water Monitor and Shutoff,,,,,,,,pending
+leak-detection,Resideo,L1 WiFi Water Leak and Freeze Detector,,,,,,,,pending
+leak-detection,Govee,WiFi Water Sensor,,,,,,,,pending
+water-pumps,Grundfos,SCALA2,,,,,,,,pending
+water-pumps,DAB,E.sybox Mini 3,,,,,,,,pending
+water-pumps,WAYNE,CDU980E,,,,,,,,pending
+water-pumps,Zoeller,M53 Mighty-Mate,,,,,,,,pending

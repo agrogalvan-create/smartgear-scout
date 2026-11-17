@@ -49,6 +49,11 @@ class LinkAuditTests(unittest.TestCase):
         })
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_path_traversal_fails(self):
+        result = self.run_audit({"index.html": '<a href="../outside.html">Outside</a>'})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("path escapes site", result.stderr)
+
     def test_missing_file_fails(self):
         result = self.run_audit({"index.html": '<a href="missing.html">Missing</a>'})
         self.assertNotEqual(result.returncode, 0)

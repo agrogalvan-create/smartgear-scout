@@ -17,6 +17,8 @@ for folder in ("guides",):
     if src.is_dir():
         shutil.copytree(src, out / folder)
 assert (out / "index.html").exists(), "Missing home page"
+assert (out / "disclosure.html").exists(), "Missing disclosure"
+assert (out / "about.html").exists(), "Missing about page"
 import os
 import subprocess
 import sys

@@ -2,6 +2,7 @@
 """Generate sitemap for a confirmed production origin; no external dependencies."""
 import os
 from pathlib import Path
+from html import escape
 from urllib.parse import urlparse
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
@@ -20,6 +21,14 @@ for page in sorted(out.rglob("*.html")):
     if page.name.startswith("google") and page.parent == out:
         continue
     loc = origin + ("/" if relative == "index.html" else "/" + relative)
+    # Set a canonical URL in each deployed editorial page, not the source files.
+    html = page.read_text(encoding="utf-8")
+    if 'rel="canonical"' in html:
+        raise SystemExit(f"Unexpected existing canonical tag in {relative}")
+    if "</head>" not in html:
+        raise SystemExit(f"Missing closing head tag in {relative}")
+    canonical = '<link rel="canonical" href="' + escape(loc, quote=True) + '">'
+    page.write_text(html.replace("</head>", canonical + "</head>", 1), encoding="utf-8")
     entry = SubElement(sitemap, "url")
     SubElement(entry, "loc").text = loc
 ElementTree(sitemap).write(out / "sitemap.xml", encoding="utf-8", xml_declaration=True)

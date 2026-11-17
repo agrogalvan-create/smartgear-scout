@@ -5,7 +5,7 @@ Official documentation: https://developers.cloudflare.com/pages/ and https://dev
 
 Cloudflare Pages supports Git-connected static-site deployments and its Free plan currently lists 500 builds/month. Confirm the current self-serve agreement and commercial-use suitability before activating.
 
-## Launch steps (not yet performed)
+## Deployment configuration (completed by owner)
 1. Create/sign in to a Cloudflare account under the owner's control.
 2. Create a Pages project using Git integration, selecting `agrogalvan-create/smartgear-scout` and `main`.
 3. Configure no framework, production branch `main`, build command `python3 scripts/build_site.py`, and build output directory `dist`. This builds a public-only folder rather than uploading internal research, tests, or GitHub configuration. Confirm Python is available in the build image.
@@ -14,22 +14,20 @@ Cloudflare Pages supports Git-connected static-site deployments and its Free pla
 6. Only after URL verification, create a sitemap with that canonical origin, and submit to search engines.
 7. Keep affiliate links inactive until program approval and disclosure review.
 
-## Launch blockers
-- Cloudflare account connection not authorized/available through current GitHub integration.
-- No verified public production URL.
-- Merchant approvals, payments, taxes and terms for Argentina still pending.
+## Remaining business and verification items
+- Merchant approvals, payments, taxes and terms for Argentina remain pending.
+- Search Console indexing is not yet confirmed.
+- Production smoke-check workflow must report a successful run before health is claimed.
 - No additional subscriptions or purchases authorized.
-
-Do not claim deployment succeeded until the public URL is visited and checked.
 
 ## Search Console discovery (2026-11-17)
 Google emailed confirmation that the property `https://agrogalvan-create.github.io/smartgear-scout/` was verified in Search Console. This **does not prove that the site is reachable or that Google has indexed any page**. Public URL availability must be tested independently. GitHub Pages may be unsuitable for a primarily commercial affiliate business under GitHub's service terms; do not assume it is the production host.
 
-To generate a sitemap **only after confirming the actual live URL**:
+To generate a sitemap for the already-confirmed live URL:
 
 ```sh
 python3 scripts/build_site.py
-SITE_URL=https://CONFIRMED-HOST/CONFIRMED-PATH python3 scripts/generate_sitemap.py
+python3 scripts/build_site.py
 ```
 
 The generator writes `dist/sitemap.xml` and appends the correct Sitemap directive to `dist/robots.txt`. Submit that verified sitemap URL in the matching Search Console property. Do not submit a URL on an unverified host.
@@ -38,7 +36,7 @@ The generator writes `dist/sitemap.xml` and appends the correct Sitemap directiv
 The owner supplied a Cloudflare Pages dashboard screenshot showing successful production deployments for `main` and automatic deployments enabled. The assigned domain is `https://smartgear-scout.pages.dev`. A green deployment status confirms the platform build/deployment completed; independent HTTP content verification and Search Console indexing remain separate checks.
 
 ### Production sitemap setup
-Set the Cloudflare Pages production environment variable `SITE_URL` to `https://smartgear-scout.pages.dev` (no trailing slash). The existing build script then generates `dist/sitemap.xml` and adds the sitemap directive to `dist/robots.txt` during the next deployment. Do not submit the sitemap to Google until its URL is reachable. The previously verified Search Console property for GitHub Pages does **not** cover the new `pages.dev` URL; add and verify a new URL-prefix property for `https://smartgear-scout.pages.dev/` before submitting `https://smartgear-scout.pages.dev/sitemap.xml`.
+The build script defaults to the confirmed production URL `https://smartgear-scout.pages.dev`; an optional Cloudflare Pages production environment variable `SITE_URL` can override it. The build script generates `dist/sitemap.xml` and adds the sitemap directive to `dist/robots.txt` during the next deployment. Do not submit the sitemap to Google until its URL is reachable. The previously verified Search Console property for GitHub Pages does **not** cover the new `pages.dev` URL; add and verify a new URL-prefix property for `https://smartgear-scout.pages.dev/` before submitting `https://smartgear-scout.pages.dev/sitemap.xml`.
 
 ## Search Console status and next checks (2026-11-17)
 The owner verified the Cloudflare Pages URL-prefix property by uploading an HTML ownership file. Keep this file at the site root and in the build output so ownership remains verified. The production sitemap opened in a browser and listed the published editorial pages. Search Console initially reported `Couldn't fetch` / `Couldn't read sitemap` and zero discovered pages; a later live URL inspection confirmed that the homepage is available to Google and can be indexed. This is not yet proof of actual indexing. The owner then hit Google's daily manual indexing request quota; wait for quota reset rather than repeatedly submitting.

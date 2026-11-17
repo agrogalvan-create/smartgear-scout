@@ -5,6 +5,7 @@ on:
       - '**/*.html'
       - 'robots.txt'
       - 'scripts/build_site.py'
+      - 'scripts/generate_sitemap.py'
       - 'scripts/check_site_links.py'
       - '.github/workflows/verify-site-build.yml'
   pull_request:
@@ -29,6 +30,13 @@ jobs:
         run: python scripts/check_site_links.py
       - name: Build public site
         run: python scripts/build_site.py
+      - name: Generate and parse test sitemap
+        env:
+          SITE_URL: https://example.com/smartgear-scout
+        run: |
+          python scripts/build_site.py
+          python -c "import xml.etree.ElementTree as ET; ET.parse('dist/sitemap.xml')"
+          grep -q 'Sitemap: https://example.com/smartgear-scout/sitemap.xml' dist/robots.txt
       - name: Check output
         run: |
           test -f dist/index.html

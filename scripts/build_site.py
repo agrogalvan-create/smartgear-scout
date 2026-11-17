@@ -17,4 +17,9 @@ for folder in ("guides",):
     if src.is_dir():
         shutil.copytree(src, out / folder)
 assert (out / "index.html").exists(), "Missing home page"
+import os
+import subprocess
+import sys
+if os.environ.get("SITE_URL"):
+    subprocess.run([sys.executable, str(root / "scripts" / "generate_sitemap.py")], check=True)
 print("Public-only site assembled in dist/; internal research and source scripts excluded.")

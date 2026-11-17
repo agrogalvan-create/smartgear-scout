@@ -34,6 +34,14 @@ def audit():
                 errors.append(f"{page.relative_to(SITE_ROOT)}: path escapes site: {href}")
             elif not target.exists():
                 errors.append(f"{page.relative_to(SITE_ROOT)}: broken link: {href}")
+            elif target.is_dir() and not (target / "index.html").exists():
+                errors.append(f"{page.relative_to(SITE_ROOT)}: directory without index: {href}")
+            elif url.fragment and target.suffix == ".html" and target.is_file():
+                import re
+                fragment = unquote(url.fragment)
+                content = target.read_text(encoding="utf-8")
+                if not re.search(r'\bid\s*=\s*["\']' + re.escape(fragment) + r'["\']', content):
+                    errors.append(f"{page.relative_to(SITE_ROOT)}: missing anchor: {href}")
     return len(pages), errors
 
 if __name__ == "__main__":

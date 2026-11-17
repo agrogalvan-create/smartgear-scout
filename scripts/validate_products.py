@@ -40,6 +40,9 @@ def validate(path=PATH):
                     datetime.date.fromisoformat(row["verified_at"].strip())
                 except ValueError:
                     errors.append(f"line {line}: verified_at must be YYYY-MM-DD")
+            if status == "published":
+                if not row["merchant_url"].strip().startswith("https://"):
+                    errors.append(f"line {line}: published products require HTTPS merchant_url")
             if status == "published" and row["affiliate_program"].strip():
                 for field in ("merchant_url", "commission_source_url"):
                     if not row[field].strip().startswith("https://"):

@@ -16,10 +16,13 @@ class PublicBuildTests(unittest.TestCase):
                        cwd=ROOT, env=env, check=True, capture_output=True, text=True)
         self.assertTrue((DIST / "index.html").is_file())
         self.assertTrue((DIST / "disclosure.html").is_file())
+        self.assertTrue((DIST / "about.html").is_file())
+        self.assertTrue((DIST / "robots.txt").is_file())
         self.assertFalse((DIST / "research").exists())
         self.assertFalse((DIST / "scripts").exists())
         self.assertFalse((DIST / ".github").exists())
         self.assertFalse((DIST / "data").exists())
+        self.assertFalse((DIST / "tests").exists())
         tree = ET.parse(DIST / "sitemap.xml")
         ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
         urls = [n.text for n in tree.findall("s:url/s:loc", ns)]

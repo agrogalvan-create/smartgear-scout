@@ -8,7 +8,7 @@ Cloudflare Pages supports Git-connected static-site deployments and its Free pla
 ## Launch steps (not yet performed)
 1. Create/sign in to a Cloudflare account under the owner's control.
 2. Create a Pages project using Git integration, selecting `agrogalvan-create/smartgear-scout` and `main`.
-3. Static HTML in repository root: set build command to blank, output directory to `/` if supported by the dashboard; follow Cloudflare's current configuration guidance.
+3. Configure no framework, production branch `main`, build command `python3 scripts/build_site.py`, and build output directory `dist`. This builds a public-only folder rather than uploading internal research, tests, or GitHub configuration. Confirm Python is available in the build image.
 4. Confirm the assigned `*.pages.dev` URL and HTTPS.
 5. Check homepage, About, Disclosure and all linked guides on mobile.
 6. Only after URL verification, create a sitemap with that canonical origin, and submit to search engines.

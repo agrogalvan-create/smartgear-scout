@@ -34,6 +34,21 @@ class LinkAuditTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("missing anchor", result.stderr)
 
+    def test_directory_index_fragment_is_checked(self):
+        result = self.run_audit({
+            "index.html": '<a href="guides/#missing">Guide section</a>',
+            "guides/index.html": '<h2 id="present">Present</h2>',
+        })
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("missing anchor", result.stderr)
+
+    def test_directory_index_fragment_can_pass(self):
+        result = self.run_audit({
+            "index.html": '<a href="guides/#present">Guide section</a>',
+            "guides/index.html": '<h2 id="present">Present</h2>',
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_missing_file_fails(self):
         result = self.run_audit({"index.html": '<a href="missing.html">Missing</a>'})
         self.assertNotEqual(result.returncode, 0)

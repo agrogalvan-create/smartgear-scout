@@ -32,6 +32,15 @@ class PublicBuildTests(unittest.TestCase):
                            if not (p.parent == DIST and p.name.startswith("google"))]
         self.assertEqual(len(urls), len(editorial_pages))
         self.assertTrue(all("/google" not in url for url in urls))
+        self.assertEqual(len(urls), len(set(urls)), "Duplicate sitemap URLs")
+        self.assertTrue(all(url.startswith("https://example.com/smartgear-scout/") for url in urls))
+        expected_urls = {
+            "https://example.com/smartgear-scout/" if p.name == "index.html" and p.parent == DIST
+            else "https://example.com/smartgear-scout/" + p.relative_to(DIST).as_posix()
+            for p in editorial_pages
+        }
+        self.assertEqual(set(urls), expected_urls,
+                         "Sitemap must match all published editorial HTML pages")
         for verification in ROOT.glob("google*.html"):
             self.assertTrue((DIST / verification.name).is_file(),
                             "Google verification must remain publicly accessible")

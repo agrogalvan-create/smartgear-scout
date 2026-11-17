@@ -52,6 +52,13 @@ class PublicBuildTests(unittest.TestCase):
             for p in editorial_pages
         }
         for page in editorial_pages:
+            html = page.read_text(encoding="utf-8")
+            self.assertIn("<title>", html, f"Missing title: {page.name}")
+            self.assertIn('name="description"', html,
+                          f"Missing search description: {page.name}")
+            self.assertIn('href="../disclosure.html"' if page.parent != DIST
+                          else 'href="disclosure.html"', html,
+                          f"Missing affiliate disclosure link: {page.name}")
             url = ("https://example.com/smartgear-scout/" if page.name == "index.html" and page.parent == DIST
                    else "https://example.com/smartgear-scout/" + page.relative_to(DIST).as_posix())
             self.assertIn('<link rel="canonical" href="' + url + '">',

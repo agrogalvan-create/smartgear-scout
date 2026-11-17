@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 from html import escape
+import re
 from urllib.parse import urlparse
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
@@ -23,8 +24,7 @@ for page in sorted(out.rglob("*.html")):
     loc = origin + ("/" if relative == "index.html" else "/" + relative)
     # Set a canonical URL in each deployed editorial page, not the source files.
     html = page.read_text(encoding="utf-8")
-    if 'rel="canonical"' in html:
-        raise SystemExit(f"Unexpected existing canonical tag in {relative}")
+    html = re.sub(r'<link\s+rel="canonical"\s+href="[^"]*"\s*/?>', "", html, flags=re.I)
     if "</head>" not in html:
         raise SystemExit(f"Missing closing head tag in {relative}")
     canonical = '<link rel="canonical" href="' + escape(loc, quote=True) + '">'
@@ -32,6 +32,8 @@ for page in sorted(out.rglob("*.html")):
     entry = SubElement(sitemap, "url")
     SubElement(entry, "loc").text = loc
 ElementTree(sitemap).write(out / "sitemap.xml", encoding="utf-8", xml_declaration=True)
-with (out / "robots.txt").open("a", encoding="utf-8") as f:
-    f.write(f"\nSitemap: {origin}/sitemap.xml\n")
+robots_path = out / "robots.txt"
+robots = robots_path.read_text(encoding="utf-8")
+robots = re.sub(r"(?m)^Sitemap: .*\n?", "", robots).rstrip() + f"\nSitemap: {origin}/sitemap.xml\n"
+robots_path.write_text(robots, encoding="utf-8")
 print(f"Created sitemap for {origin}")

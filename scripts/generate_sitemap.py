@@ -13,7 +13,7 @@ origin = os.environ.get("SITE_URL", "").strip().rstrip("/")
 parsed = urlparse(origin)
 if (parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password
         or parsed.query or parsed.fragment or parsed.path.endswith("/") and parsed.path != "/"
-        or ".." in parsed.path.split("/")):
+        or ".." in parsed.path.split("/") or any(ch.isspace() for ch in origin)):
     raise SystemExit("SITE_URL must be an explicitly confirmed HTTPS site origin/path")
 if not out.joinpath("index.html").exists():
     raise SystemExit("Build dist/ first with scripts/build_site.py")

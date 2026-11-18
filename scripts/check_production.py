@@ -18,6 +18,7 @@ def fetch(path):
 
 def main():
     robots = fetch("/robots.txt")
+    assert "Disallow: /" not in robots, "Robots rules block the whole site"
     assert f"Sitemap: {BASE}/sitemap.xml" in robots, "Wrong sitemap directive"
     sitemap = ET.fromstring(fetch("/sitemap.xml"))
     urls = [node.text for node in sitemap.findall("s:url/s:loc", NS)]
@@ -27,6 +28,7 @@ def main():
     assert all(urlsplit(u).scheme == "https" and urlsplit(u).netloc == urlsplit(BASE).netloc and urlsplit(u).path.startswith("/") for u in urls), "Unexpected sitemap origin"
     assert all(not urlsplit(u).path.rsplit("/", 1)[-1].startswith("google") for u in urls), "Verification token leaked into sitemap"
     assert BASE + "/" in urls, "Homepage absent from sitemap"
+    assert all(not u.endswith("/googleca756b5759da4af1.html") for u in urls), "Ownership token must not be indexed"
     assert BASE + "/about.html" in urls, "About page absent from sitemap"
     assert BASE + "/disclosure.html" in urls, "Disclosure page absent from sitemap"
     assert BASE + "/guides/sprinkler-runoff-and-cycle-soak.html" in urls, "Latest irrigation guide absent from sitemap"

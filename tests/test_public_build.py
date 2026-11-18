@@ -41,6 +41,23 @@ class PublicBuildTests(unittest.TestCase):
                         else "https://example.com/smartgear-scout/" + page.relative_to(DIST).as_posix())
             self.assertIn('<link rel="canonical" href="' + expected + '">', content)
 
+    def test_invalid_site_urls_are_rejected(self):
+        invalid = [
+            "http://example.com",
+            "https://user:password@example.com",
+            "https://example.com/site/../other",
+            "https://example.com/site?preview=1",
+            "https://example.com/#fragment",
+        ]
+        for site_url in invalid:
+            with self.subTest(site_url=site_url):
+                env = dict(os.environ, SITE_URL=site_url)
+                result = subprocess.run(
+                    [sys.executable, str(ROOT / "scripts/build_site.py")],
+                    cwd=ROOT, env=env, capture_output=True, text=True,
+                )
+                self.assertNotEqual(result.returncode, 0, site_url)
+
     def test_public_output_and_sitemap(self):
         env = dict(os.environ, SITE_URL="https://example.com/smartgear-scout")
         subprocess.run([sys.executable, str(ROOT / "scripts/build_site.py")],

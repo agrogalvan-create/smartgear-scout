@@ -39,6 +39,9 @@ def main():
         assert expected in html, f"Canonical missing or incorrect: {url}"
         assert "<title>" in html, f"Missing page title: {url}"
         assert 'name="description"' in html, f"Missing meta description: {url}"
+        if relative != "/disclosure.html":
+            disclosure_href = 'href="../disclosure.html"' if relative.startswith("/guides/") else 'href="disclosure.html"'
+            assert disclosure_href in html, f"Missing affiliate disclosure link: {url}"
     print(f"OK: robots, sitemap and {len(urls)} canonical pages are accessible")
 
 if __name__ == "__main__":

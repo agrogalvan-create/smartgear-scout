@@ -76,6 +76,8 @@ class PublicBuildTests(unittest.TestCase):
         urls = [n.text for n in tree.findall("s:url/s:loc", ns)]
         self.assertIn("https://example.com/smartgear-scout/", urls)
         self.assertIn("https://example.com/smartgear-scout/about.html", urls)
+        self.assertIn("https://example.com/smartgear-scout/guides/sprinkler-zone-not-working.html", urls)
+        self.assertIn("https://example.com/smartgear-scout/guides/drip-irrigation-filter-maintenance.html", urls)
         editorial_pages = [p for p in DIST.rglob("*.html")
                            if not (p.parent == DIST and p.name.startswith("google"))]
         self.assertEqual(len(urls), len(editorial_pages))

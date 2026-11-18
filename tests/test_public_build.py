@@ -78,6 +78,8 @@ class PublicBuildTests(unittest.TestCase):
         self.assertIn("https://example.com/smartgear-scout/about.html", urls)
         self.assertIn("https://example.com/smartgear-scout/guides/sprinkler-zone-not-working.html", urls)
         self.assertIn("https://example.com/smartgear-scout/guides/drip-irrigation-filter-maintenance.html", urls)
+        self.assertIn("https://example.com/smartgear-scout/guides/irrigation-backflow-prevention.html", urls)
+        self.assertIn("https://example.com/smartgear-scout/guides/irrigation-rain-sensor-troubleshooting.html", urls)
         editorial_pages = [p for p in DIST.rglob("*.html")
                            if not (p.parent == DIST and p.name.startswith("google"))]
         self.assertEqual(len(urls), len(editorial_pages))

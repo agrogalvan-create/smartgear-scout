@@ -15,7 +15,7 @@ on:
       - 'robots.txt'
       - 'scripts/build_site.py'
       - 'scripts/generate_sitemap.py'
-      - 'tests/test_public_build.py'
+      - 'tests/**'
       - 'scripts/check_site_links.py'
       - '.github/workflows/verify-site-build.yml'
   workflow_dispatch:

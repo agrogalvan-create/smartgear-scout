@@ -3,7 +3,6 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from functools import lru_cache
-import re
 from urllib.parse import unquote, urlsplit
 import sys
 
@@ -14,16 +13,23 @@ class Links(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.anchors = set()
     def handle_starttag(self, tag, attrs):
+        props = dict(attrs)
+        if props.get("id") is not None:
+            self.anchors.add(props["id"])
+        if tag == "a" and props.get("name") is not None:
+            self.anchors.add(props["name"])
         if tag in ("a", "link", "script", "img"):
-            props = dict(attrs)
             value = props.get("href") if tag in ("a", "link") else props.get("src")
             if value:
                 self.links.append(value)
 
 @lru_cache(maxsize=512)
-def read_html(path):
-    return path.read_text(encoding="utf-8")
+def anchors_in(path):
+    parser = Links()
+    parser.feed(path.read_text(encoding="utf-8"))
+    return parser.anchors
 
 def audit():
     errors = []
@@ -52,8 +58,7 @@ def audit():
                 target = index
             if url.fragment and target.suffix == ".html" and target.is_file():
                 fragment = unquote(url.fragment)
-                content = read_html(target)
-                if not re.search(r'\bid\s*=\s*["\']' + re.escape(fragment) + r'["\']', content):
+                if fragment not in anchors_in(target):
                     errors.append(f"{page.relative_to(SITE_ROOT)}: missing anchor: {href}")
     return len(pages), errors
 

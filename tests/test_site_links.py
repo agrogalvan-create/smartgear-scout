@@ -68,6 +68,14 @@ class LinkAuditTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("path escapes site", result.stderr)
 
+    def test_directory_without_index_fails(self):
+        result = self.run_audit({
+            "index.html": '<a href="guides/">Guides</a>',
+            "guides/other.html": '<h2>Other</h2>',
+        })
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("directory without index", result.stderr)
+
     def test_missing_file_fails(self):
         result = self.run_audit({"index.html": '<a href="missing.html">Missing</a>'})
         self.assertNotEqual(result.returncode, 0)

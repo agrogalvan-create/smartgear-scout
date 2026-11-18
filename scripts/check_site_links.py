@@ -2,6 +2,7 @@
 """Check internal HTML links; external URLs are not fetched."""
 from html.parser import HTMLParser
 from pathlib import Path
+from functools import lru_cache
 import re
 from urllib.parse import unquote, urlsplit
 import sys
@@ -19,6 +20,10 @@ class Links(HTMLParser):
             value = props.get("href") if tag in ("a", "link") else props.get("src")
             if value:
                 self.links.append(value)
+
+@lru_cache(maxsize=512)
+def read_html(path):
+    return path.read_text(encoding="utf-8")
 
 def audit():
     errors = []
@@ -47,7 +52,7 @@ def audit():
                 target = index
             if url.fragment and target.suffix == ".html" and target.is_file():
                 fragment = unquote(url.fragment)
-                content = target.read_text(encoding="utf-8")
+                content = read_html(target)
                 if not re.search(r'\bid\s*=\s*["\']' + re.escape(fragment) + r'["\']', content):
                     errors.append(f"{page.relative_to(SITE_ROOT)}: missing anchor: {href}")
     return len(pages), errors

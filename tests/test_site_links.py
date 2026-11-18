@@ -26,6 +26,13 @@ class LinkAuditTests(unittest.TestCase):
         })
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_unquoted_id_and_named_anchor(self):
+        result = self.run_audit({
+            "index.html": '<a href="guide.html#part">Part</a><a href="guide.html#legacy">Legacy</a>',
+            "guide.html": '<h2 id=part>Part</h2><a name="legacy">Legacy section</a>',
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_missing_fragment_fails(self):
         result = self.run_audit({
             "index.html": '<a href="guide.html#missing">Broken</a>',

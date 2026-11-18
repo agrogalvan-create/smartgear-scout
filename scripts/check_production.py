@@ -30,6 +30,7 @@ def main():
     assert BASE + "/" in urls, "Homepage absent from sitemap"
     assert all(not u.endswith("/googleca756b5759da4af1.html") for u in urls), "Ownership token must not be indexed"
     assert BASE + "/about.html" in urls, "About page absent from sitemap"
+    assert BASE + "/guides/index.html" in urls, "Guide directory absent from sitemap"
     assert BASE + "/disclosure.html" in urls, "Disclosure page absent from sitemap"
     assert BASE + "/guides/sprinkler-runoff-and-cycle-soak.html" in urls, "Latest irrigation guide absent from sitemap"
     assert BASE + "/guides/irrigation-pressure-and-flow.html" in urls, "Pressure and flow guide absent from sitemap"

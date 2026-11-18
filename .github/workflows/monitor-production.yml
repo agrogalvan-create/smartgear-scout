@@ -1,5 +1,9 @@
 name: Monitor production website
 on:
+  push:
+    paths:
+      - 'scripts/check_production.py'
+      - '.github/workflows/monitor-production.yml'
   schedule:
     - cron: '23 12 * * *'
   workflow_dispatch:

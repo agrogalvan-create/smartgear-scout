@@ -25,11 +25,11 @@ def main():
     assert all(isinstance(u, str) and u for u in urls), "Empty sitemap URL"
     assert len(urls) == len(set(urls)), "Duplicate URLs"
     assert all(urlsplit(u).scheme == "https" and urlsplit(u).netloc == urlsplit(BASE).netloc and urlsplit(u).path.startswith("/") for u in urls), "Unexpected sitemap origin"
-    assert all("/google" not in u for u in urls), "Verification token leaked into sitemap"
+    assert all(not urlsplit(u).path.rsplit("/", 1)[-1].startswith("google") for u in urls), "Verification token leaked into sitemap"
     assert BASE + "/" in urls, "Homepage absent from sitemap"
     assert BASE + "/about.html" in urls, "About page absent from sitemap"
     assert BASE + "/disclosure.html" in urls, "Disclosure page absent from sitemap"
-    assert all(not urlsplit(u).query and not urlsplit(u).fragment for u in urls), "Unexpected query or fragment in sitemap"
+    assert all(not urlsplit(u).query and not urlsplit(u).fragment and not urlsplit(u).username and not urlsplit(u).password for u in urls), "Unexpected query, credentials or fragment in sitemap"
     for url in urls:
         relative = url[len(BASE):]
         html = fetch(relative)

@@ -35,6 +35,8 @@ def main():
     assert BASE + "/guides/irrigation-pressure-and-flow.html" in urls, "Pressure and flow guide absent from sitemap"
     assert BASE + "/guides/sprinkler-zone-not-working.html" in urls, "Sprinkler zone guide absent from sitemap"
     assert BASE + "/guides/drip-irrigation-filter-maintenance.html" in urls, "Drip filter guide absent from sitemap"
+    assert BASE + "/guides/irrigation-backflow-prevention.html" in urls, "Backflow guide absent from sitemap"
+    assert BASE + "/guides/irrigation-rain-sensor-troubleshooting.html" in urls, "Rain sensor guide absent from sitemap"
     assert all(not urlsplit(u).query and not urlsplit(u).fragment and not urlsplit(u).username and not urlsplit(u).password for u in urls), "Unexpected query, credentials or fragment in sitemap"
     for url in urls:
         relative = url[len(BASE):]

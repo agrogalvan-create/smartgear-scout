@@ -65,6 +65,7 @@ class PublicBuildTests(unittest.TestCase):
         self.assertTrue((DIST / "index.html").is_file())
         self.assertTrue((DIST / "disclosure.html").is_file())
         self.assertTrue((DIST / "about.html").is_file())
+        self.assertTrue((DIST / "guides" / "index.html").is_file())
         self.assertTrue((DIST / "robots.txt").is_file())
         self.assertFalse((DIST / "research").exists())
         self.assertFalse((DIST / "scripts").exists())
@@ -76,6 +77,7 @@ class PublicBuildTests(unittest.TestCase):
         urls = [n.text for n in tree.findall("s:url/s:loc", ns)]
         self.assertIn("https://example.com/smartgear-scout/", urls)
         self.assertIn("https://example.com/smartgear-scout/about.html", urls)
+        self.assertIn("https://example.com/smartgear-scout/guides/index.html", urls)
         self.assertIn("https://example.com/smartgear-scout/guides/sprinkler-zone-not-working.html", urls)
         self.assertIn("https://example.com/smartgear-scout/guides/drip-irrigation-filter-maintenance.html", urls)
         self.assertIn("https://example.com/smartgear-scout/guides/irrigation-backflow-prevention.html", urls)

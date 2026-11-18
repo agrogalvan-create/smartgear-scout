@@ -33,6 +33,13 @@ class LinkAuditTests(unittest.TestCase):
         })
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_percent_encoded_fragment(self):
+        result = self.run_audit({
+            "index.html": '<a href="guide.html#part%20one">Part</a>',
+            "guide.html": '<h2 id="part one">Part</h2>',
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_missing_fragment_fails(self):
         result = self.run_audit({
             "index.html": '<a href="guide.html#missing">Broken</a>',
